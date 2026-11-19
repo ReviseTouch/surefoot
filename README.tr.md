@@ -67,6 +67,10 @@ içindir.
 0.1, [Scour](https://github.com/ReviseTouch/Scour) tarafından kullanılıyor. API
 değişebilir.
 
+- `Threads::Auto`, tüketicinin diskten yavaş olduğu yerde henüz kazanç
+  değil. Sınırı indeksleyicisi olan Scour'un içinde sabit iki iş parçacığına
+  kaybetti (11,9 s'ye karşı 14,0 s), çünkü tüketicinin kullanamayacağı iş
+  parçacıklarını denemeyi sürdürdü. Orada `Threads::Fixed` kullanın.
 - Hız ayarlayıcı kendi verimini ve tüketicisini görür. Başka süreçleri görmez;
   onlara yol vermek `Priority::Background`'ın işidir ve yalnız Linux'ta vardır.
 - macOS taşınabilir yolu kullanır. `getattrlistbulk` henüz kullanılmıyor.

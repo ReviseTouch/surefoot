@@ -96,6 +96,10 @@ Not measured: a cold cache, a spinning disk, a network mount, Windows, macOS.
 
 0.1, used by [Scour](https://github.com/ReviseTouch/Scour). The API may change.
 
+- `Threads::Auto` is not yet a win where the consumer is slower than the
+  disk. Inside Scour, whose indexer is the limit, it lost to a fixed two
+  threads — 14.0 s against 11.9 s — because it kept trying threads the
+  consumer could not use. Use `Threads::Fixed` there.
 - The pacer sees its own throughput and its consumer. It does not see other
   processes; standing aside for them is `Priority::Background`, which is
   implemented on Linux only.
