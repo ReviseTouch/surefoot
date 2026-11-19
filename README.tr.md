@@ -42,6 +42,10 @@ eprintln!("{} girdi, iş parçacıkları {:?}", report.seen, report.threads);
   partiler hâlinde ulaşır. Yavaş tüketici yürüyüşü yavaşlatır, belleği büyütmez.
 - **Okuyamadığını bildirir.** Her ret, yolu ve `io::Error`'ı ile gelir; yürüyüş
   etrafından devam eder.
+- **NTFS'i tablosundan okur.** `surefoot::mft` bir birimi dizin dizin
+  listelemek yerine ana dosya tablosunu baştan sona okur ve bir yürüyüşün
+  vereceği satırların aynısını verir. Yönetici ister; `mft::open` yönetici
+  olunmadığını söyler, çağıran da yürür.
 - **Her karar ezilebilir.** `Threads::Fixed(n)`, `.medium(…)`, `.priority(…)`,
   `.batch(…)`, `.queue(…)`.
 
@@ -74,7 +78,10 @@ değişebilir.
 - Hız ayarlayıcı kendi verimini ve tüketicisini görür. Başka süreçleri görmez;
   onlara yol vermek `Priority::Background`'ın işidir ve yalnız Linux'ta vardır.
 - macOS taşınabilir yolu kullanır. `getattrlistbulk` henüz kullanılmıyor.
-- NTFS biriminin ana dosya tablosundan (MFT) okunması henüz burada değil.
+- `mft` yalnız bütün bir birimi okur; satırlar dizin dizin değil kayıt
+  sırasıyla gelir. `$MFT`'nin parça listesi bir uzantı kaydına taşmışsa onu
+  izlemez: o kadar parçalı bir tabloda okuma, bir kısmını vermek yerine hata
+  verir.
 
 ## Lisans
 

@@ -25,8 +25,12 @@
 //!   type and asks for the `stat` itself, so what it turns away costs none;
 //!   what it takes is batched to the caller over a bounded queue.
 //!
+//! On Windows, [`mft`] reads an NTFS volume from its master file table when the
+//! process is an administrator, which is seconds where a walk is minutes.
+//!
 //! Every automatic decision has a setting that overrides it.
 
+pub mod mft;
 mod pace;
 pub mod probe;
 mod walk;

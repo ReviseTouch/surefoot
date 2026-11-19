@@ -41,6 +41,10 @@ eprintln!("{} entries, threads {:?}", report.seen, report.threads);
   bounded queue. A slow consumer slows the walk; it does not grow memory.
 - **Reports what it could not read.** Every refusal arrives with its path and
   its `io::Error`, and the walk goes on around it.
+- **Reads NTFS from its table.** `surefoot::mft` reads a volume's master file
+  table end to end instead of listing it directory by directory, and hands
+  over the same rows a walk would. It needs an administrator; `mft::open` says
+  when it is not one, and the caller walks instead.
 - **Every decision can be overridden.** `Threads::Fixed(n)`, `.medium(…)`,
   `.priority(…)`, `.batch(…)`, `.queue(…)`.
 
@@ -104,7 +108,10 @@ Not measured: a cold cache, a spinning disk, a network mount, Windows, macOS.
   processes; standing aside for them is `Priority::Background`, which is
   implemented on Linux only.
 - macOS uses the portable path. `getattrlistbulk` is not used yet.
-- Reading an NTFS volume from its master file table is not here yet.
+- `mft` reads a whole volume only, and its rows come in record order, not
+  directory by directory. It does not follow `$MFT`'s run list into an
+  extension record: a table that fragmented fails the read rather than return
+  part of it.
 
 ## Licence
 
