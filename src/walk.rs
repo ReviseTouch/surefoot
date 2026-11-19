@@ -396,9 +396,7 @@ impl Walk {
                 })
             },
             |event| match event {
-                Event::Batch(entries) => entries
-                    .into_iter()
-                    .try_for_each(|entry| each(Ok(entry))),
+                Event::Batch(entries) => entries.into_iter().try_for_each(|entry| each(Ok(entry))),
                 Event::Unreadable(refusal) => each(Err(refusal)),
             },
         )

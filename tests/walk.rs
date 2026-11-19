@@ -88,15 +88,18 @@ fn the_report_counts_what_was_seen_and_names_the_threads() {
 #[test]
 fn several_roots_are_all_walked_and_a_root_that_is_a_file_is_itself() {
     let tmp = tempfile::tempdir().unwrap();
-    let (a, b, lone) = (tmp.path().join("a"), tmp.path().join("b"), tmp.path().join("lone"));
+    let (a, b, lone) = (
+        tmp.path().join("a"),
+        tmp.path().join("b"),
+        tmp.path().join("lone"),
+    );
     fs::create_dir(&a).unwrap();
     fs::create_dir(&b).unwrap();
     fs::write(a.join("x"), b"").unwrap();
     fs::write(b.join("y"), b"").unwrap();
     fs::write(&lone, b"").unwrap();
     let found = paths(&Walk::new([&a, &b, &lone]));
-    let expect: BTreeSet<PathBuf> =
-        [a.clone(), a.join("x"), b.clone(), b.join("y"), lone].into();
+    let expect: BTreeSet<PathBuf> = [a.clone(), a.join("x"), b.clone(), b.join("y"), lone].into();
     assert_eq!(found, expect);
 }
 
@@ -233,8 +236,12 @@ fn a_directory_that_refuses_is_named_and_the_walk_goes_on_around_it() {
     });
     fs::set_permissions(&shut, fs::Permissions::from_mode(0o755)).unwrap();
     // The directory itself was listed by its parent; only its inside is dark.
-    let expect: BTreeSet<PathBuf> =
-        [tmp.path().to_owned(), shut.clone(), tmp.path().join("beside")].into();
+    let expect: BTreeSet<PathBuf> = [
+        tmp.path().to_owned(),
+        shut.clone(),
+        tmp.path().join("beside"),
+    ]
+    .into();
     assert_eq!(found, expect);
     assert_eq!(refused, [(shut, std::io::ErrorKind::PermissionDenied)]);
 }
@@ -276,7 +283,10 @@ fn a_link_is_a_link_until_links_are_followed_and_a_loop_is_named_not_walked() {
         ControlFlow::Continue(())
     });
     let through = a.join("to_b");
-    assert_eq!(found, [a.clone(), through.clone(), through.join("file")].into());
+    assert_eq!(
+        found,
+        [a.clone(), through.clone(), through.join("file")].into()
+    );
     assert_eq!(loops, [through.join("to_a")]);
 }
 

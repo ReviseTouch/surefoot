@@ -33,6 +33,5 @@ mod walk;
 
 pub use probe::{FsTraits, Medium, Probe};
 pub use walk::{
-    Entry, Event, Found, Priority, Report, ThreadUse, Threads, Unreadable, Visit, Walk,
-    stand_aside,
+    Entry, Event, Found, Priority, Report, ThreadUse, Threads, Unreadable, Visit, Walk, stand_aside,
 };
