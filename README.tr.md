@@ -65,6 +65,8 @@ yürüdü. Bu kadar kısa bir yürüyüşte sabit sekizi geçmez; diski bilmeyen
 içindir.
 
 Ölçülmedi: soğuk önbellek, dönen disk, ağ bağlaması, Windows, macOS.
+Testler her gönderimde üç sistemde de koşar; orada çalıştığını söylerler,
+ne kadar hızlı olduğunu değil.
 
 ## Durum
 

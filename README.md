@@ -95,6 +95,8 @@ reached six. It does not beat a fixed eight on a walk this short; it is for the
 caller who does not know the disk.
 
 Not measured: a cold cache, a spinning disk, a network mount, Windows, macOS.
+The tests run on all three systems on every push; they say it works there,
+not how fast.
 
 ## Status
 
