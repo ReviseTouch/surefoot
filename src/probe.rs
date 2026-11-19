@@ -408,7 +408,6 @@ mod windows_impl {
     const DRIVE_REMOVABLE: u32 = 2;
     const DRIVE_FIXED: u32 = 3;
     const DRIVE_REMOTE: u32 = 4;
-    const FILE_CASE_SENSITIVE_SEARCH: u32 = 0x0000_0001;
 
     /// The volume root a path lives on: `C:\` for `C:\Users\x`.
     /// Windows keys everything it can say about a filesystem to the volume.
@@ -420,33 +419,15 @@ mod windows_impl {
         (ok != 0).then_some(root)
     }
 
-    pub fn traits_of(path: &Path) -> FsTraits {
-        let Some(root) = volume_root(path) else {
-            return FsTraits::UNKNOWN;
-        };
-        let mut name = [0u16; 64];
-        let mut flags: u32 = 0;
-        // SAFETY: null is accepted for unwanted outputs; both buffers are valid.
-        let ok = unsafe {
-            GetVolumeInformationW(
-                root.as_ptr(),
-                std::ptr::null_mut(),
-                0,
-                std::ptr::null_mut(),
-                std::ptr::null_mut(),
-                &mut flags,
-                name.as_mut_ptr(),
-                name.len() as u32,
-            )
-        };
-        if ok == 0 {
-            return FsTraits::UNKNOWN;
-        }
-        // Off by default even on NTFS — the opposite of the same disk under ntfs3.
-        let case_sensitive = flags & FILE_CASE_SENSITIVE_SEARCH != 0;
-
+    /// The same answer for every volume Windows can reach, so nothing is
+    /// asked. Not `FILE_CASE_SENSITIVE_SEARCH`: NTFS sets it on every volume,
+    /// for what the filesystem could do, while Windows looks names up without
+    /// case — the opposite of the same disk under ntfs3. A directory can be
+    /// made sensitive one at a time (`fsutil file setCaseSensitiveInfo`); that
+    /// is not asked either.
+    pub fn traits_of(_path: &Path) -> FsTraits {
         FsTraits {
-            case_sensitive,
+            case_sensitive: false,
             // Windows has ACLs, not a mode bit.
             real_modes: false,
         }

@@ -268,8 +268,10 @@ pub(crate) fn parse(rec: &[u8]) -> Option<Parsed> {
                     let ns = v[65];
                     if let Some(raw) = v.get(66..66 + n * 2) {
                         let units: Vec<u16> = raw
-                            .chunks_exact(2)
-                            .map(|c| u16::from_le_bytes([c[0], c[1]]))
+                            .as_chunks::<2>()
+                            .0
+                            .iter()
+                            .map(|c| u16::from_le_bytes(*c))
                             .collect();
                         let name = String::from_utf16_lossy(&units);
                         if ns == NAMESPACE_DOS {
